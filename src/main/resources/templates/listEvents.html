@@ -1,0 +1,51 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Event Booking page - Welcome and choose an Event</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+</header>
+<main>
+    <h2>Choose an event:</h2>
+    <form th:method="POST" th:action="@{/home}">
+        <ul>
+            <li th:each="Events: ${events}">
+                <input type="radio" name="event_name" th:value="${Events.getName()}"/>
+                <span th:text="'Name: '+${Events.getName()} +' Description:'+${Events.getDescription()} +' Rating:'+${Events.getPopularityScore()}"></span>
+            </li>
+        </ul>
+
+        <h2>Choose number of tickets:</h2>
+        <input type="number" name="numTickets" id="numTickets" min="1" max="10"><br/>
+        <br/>
+
+        <input type="submit" value="Submit" name="redirect">
+    </form>
+<h3>
+    Search Events:
+</h3>
+    <form th:method="POST" th:action="@{/home}">
+        <label>Name:</label>
+        <input type="text" name="searchText">
+        <label>Rating:</label>
+        <input type="number" name="searchDesc">
+        <input type="submit" value="Search" name="search">
+    </form>
+    <ul>
+        <li th:each="SearchEvents: ${searchEvents}">
+            <span th:text="'Name: '+${SearchEvents.getName()} +' Description:'+${SearchEvents.getDescription()} +' Rating:'+${SearchEvents.getPopularityScore()}"></span>
+        </li>
+    </ul>
+</main>
+</body>
+</html>
