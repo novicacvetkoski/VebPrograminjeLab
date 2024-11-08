@@ -4,7 +4,6 @@ import mk.finki.ukim.mk.demo.bootstrap.DataHolder;
 import mk.finki.ukim.mk.demo.model.EventBooking;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.stream.Collectors;
 
