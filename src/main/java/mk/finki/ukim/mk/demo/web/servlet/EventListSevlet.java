@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "event_list",urlPatterns = "/home")
+@WebServlet(name = "event_list",urlPatterns = "/servlet/home")
 public class EventListSevlet extends HttpServlet {
     private final EventService EventService;
     private final EventBookingService Bookings;

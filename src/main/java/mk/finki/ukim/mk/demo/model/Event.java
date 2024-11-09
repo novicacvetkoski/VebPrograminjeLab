@@ -27,7 +27,9 @@ public class Event {
     public double getPopularityScore() {
         return popularityScore;
     }
-
+    public long getId() {
+        return id;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -40,9 +42,16 @@ public class Event {
         this.popularityScore = popularityScore;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Event(String name, String description, double popularityScore) {
+        this.id = (long) (Math.random() * 1000);
         this.name = name;
         this.description = description;
         this.popularityScore = popularityScore;
     }
+
+
 }
