@@ -8,6 +8,12 @@ public class Event {
     private long id;
     private Location location;
 
+    boolean liked;
+
+    public boolean isLiked() {
+        return liked;
+    }
+
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -51,6 +57,12 @@ public class Event {
         this.name = name;
         this.description = description;
         this.popularityScore = popularityScore;
+        this.liked = true;
+    }
+
+    public void like(){
+        this.popularityScore+=5;
+        liked = false;
     }
 
 

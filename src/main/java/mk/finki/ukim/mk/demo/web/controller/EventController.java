@@ -74,7 +74,6 @@ public class EventController {
             model.addAttribute("Event",tmp);
         }
         return "AddEvent";
-
     }
     @PostMapping("/event/submitBooking")
     public String BookingConfrimation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -107,5 +106,12 @@ public class EventController {
         model.addAttribute("events",this.EventService.listAll());
         return "listEvents";
     }
+    @PostMapping("/like_event/{id}")
+    public String like(@PathVariable long id){
+        Event tmp = EventService.find_by_ID(id).get();
+        tmp.like();
+        return "redirect:/events";
+    }
+
 
 }

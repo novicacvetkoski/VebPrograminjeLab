@@ -28,6 +28,9 @@ public class EventRepository {
         DataHolder.events.add(e);
         return Optional.of(e);
     }
+    public void like(Event e){
+        e.like();
+    }
     public void delete(long ID){
         DataHolder.events.removeIf(i->i.getId()==ID);
     }
