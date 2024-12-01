@@ -1,12 +1,31 @@
 package mk.finki.ukim.mk.demo.model;
 
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
+@Entity
+@NoArgsConstructor
 public class Event {
     private String name;
     private String description;
     private double popularityScore;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
     private Location location;
+
+    boolean liked;
+
+    public Event(String name, String description, double popularityScore) {
+        this.name = name;
+        this.description = description;
+        this.popularityScore = popularityScore;
+        this.liked = true;
+    }
+    public boolean isLiked() {
+        return liked;
+    }
 
     public void setLocation(Location location) {
         this.location = location;
@@ -45,12 +64,9 @@ public class Event {
     public void setId(long id) {
         this.id = id;
     }
-
-    public Event(String name, String description, double popularityScore) {
-        this.id = (long) (Math.random() * 1000);
-        this.name = name;
-        this.description = description;
-        this.popularityScore = popularityScore;
+    public void like(){
+        this.popularityScore+=5;
+        liked = false;
     }
 
 

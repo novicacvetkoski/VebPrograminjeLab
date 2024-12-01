@@ -104,6 +104,13 @@
                                             <i class="fa fa-trash">Delete</i>
                                         </button>
                                     </form>
+                                    <form th:if="${Events.isLiked()}" th:action="@{'events/like_event/{id}' (id=${Events.getId()})}"
+                                          th:method="LIKE">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger delete-product">
+                                            <i class="fa fa-trash">Like</i>
+                                        </button>
+                                    </form>
                                 </th:block>
                                 <th:block>
                                     <a th:href="@{'events/events/edit-form/{id}' (id=${Events.getId()})}"

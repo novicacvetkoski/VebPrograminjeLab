@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,11 @@ public class EventController {
 
     @GetMapping
     public String getEventsPage(@RequestParam(required = false) String error, Model model){
-        model.addAttribute("events",this.EventService.listAll());
+        List<Location> locationList=locationService.findAll();
+        List<Event> eventList = this.EventService.listAll().stream()
+                .sorted(Comparator.comparingLong(e -> e.getLocation().getId()))
+                .collect(Collectors.toList());
+        model.addAttribute("events",eventList);
         return "listEvents";
     }
     @PostMapping
@@ -57,7 +62,7 @@ public class EventController {
     }
     @PostMapping("/delete/{id}")
     public String deleteEvent(@PathVariable Long id){
-        this.EventService.delete(id);
+        this.EventService.deleteById(id);
         return "redirect:/events";
     }
 
@@ -68,13 +73,13 @@ public class EventController {
     }
     @GetMapping("/events/edit-form/{id}")
     public String getEditEventForm(@PathVariable Long id, Model model){
-        if(this.EventService.find_by_ID(id).isPresent()){
-            Event tmp = this.EventService.find_by_ID(id).get();
+        if(!this.EventService.find_by_ID(id).isEmpty()){
+            List<Event> eventList = this.EventService.find_by_ID(id);
+            Event tmp=eventList.get(0);
             model.addAttribute("location_IDS",locationService.findAll());
             model.addAttribute("Event",tmp);
         }
         return "AddEvent";
-
     }
     @PostMapping("/event/submitBooking")
     public String BookingConfrimation(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,15 +91,22 @@ public class EventController {
         return "redirect:/event/BookingConfirmation";
     }
     @PostMapping("/add")
-    public String saveEvent(@RequestParam String name,
+    public String saveEvent(@RequestParam(required = false) Long id,
+                            @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularity_score,
                             @RequestParam long location_id)
     {
-        Event e = new Event(name,description,popularity_score);
-        Location tmp = locationService.find_by_ID(location_id).get();
-        e.setLocation(tmp);
-        this.EventService.save(e);
+        List<Location> locationList = locationService.find_by_ID(location_id);
+        Location tmp = locationList.get(0);
+        if (id != null) {
+            this.EventService.update(id,name,description,popularity_score,tmp);
+        }
+        else{
+            Event e = new Event(name,description,popularity_score);
+            e.setLocation(tmp);
+            this.EventService.save(e);
+        }
         return "redirect:/events";
     }
 
@@ -107,5 +119,11 @@ public class EventController {
         model.addAttribute("events",this.EventService.listAll());
         return "listEvents";
     }
-
+    @PostMapping("/like_event/{id}")
+    public String like(@PathVariable long id){
+        List<Event> eventList = this.EventService.find_by_ID(id);
+        Event tmp=eventList.get(0);
+        tmp.like();
+        return "redirect:/events";
+    }
 }

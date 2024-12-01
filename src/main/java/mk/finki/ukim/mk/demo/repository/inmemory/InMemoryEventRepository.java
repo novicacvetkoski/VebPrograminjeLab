@@ -1,16 +1,15 @@
-package mk.finki.ukim.mk.demo.repository;
+package mk.finki.ukim.mk.demo.repository.inmemory;
 
 import mk.finki.ukim.mk.demo.bootstrap.DataHolder;
 import mk.finki.ukim.mk.demo.model.Event;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class EventRepository {
+public class InMemoryEventRepository {
     public List<Event> findAll(){
         return DataHolder.events;
     }
@@ -27,6 +26,9 @@ public class EventRepository {
         DataHolder.events.removeIf(i->i.getName().equals(e.getName()));
         DataHolder.events.add(e);
         return Optional.of(e);
+    }
+    public void like(Event e){
+        e.like();
     }
     public void delete(long ID){
         DataHolder.events.removeIf(i->i.getId()==ID);

@@ -1,7 +1,8 @@
 package mk.finki.ukim.mk.demo.service.impl;
 
 import mk.finki.ukim.mk.demo.model.Location;
-import mk.finki.ukim.mk.demo.repository.LocationRepository;
+import mk.finki.ukim.mk.demo.repository.inmemory.InMemoryLocationRepository;
+import mk.finki.ukim.mk.demo.repository.jpa.LocationRepository;
 import mk.finki.ukim.mk.demo.service.LocationService;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<Location> find_by_ID(long id) {
-        return locationRepository.find_by_ID(id);
+    public List<Location> find_by_ID(long id) {
+        return locationRepository.findById(id);
     }
 
     @Override

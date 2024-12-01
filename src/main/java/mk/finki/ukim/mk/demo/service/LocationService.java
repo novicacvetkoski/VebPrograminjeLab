@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface LocationService {
     public List<Location> findAll();
-    public Optional<Location> find_by_ID(long id);
+    public List<Location> find_by_ID(long id);
 }
