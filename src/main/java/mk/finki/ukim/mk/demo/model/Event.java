@@ -14,6 +14,8 @@ public class Event {
     private long id;
     @ManyToOne
     private Location location;
+    @ManyToOne
+    private Category category;
 
     boolean liked;
 
@@ -23,8 +25,17 @@ public class Event {
         this.popularityScore = popularityScore;
         this.liked = true;
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
     public boolean isLiked() {
         return liked;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setLocation(Location location) {

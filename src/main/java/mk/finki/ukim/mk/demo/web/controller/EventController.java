@@ -5,8 +5,10 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.mk.demo.model.Category;
 import mk.finki.ukim.mk.demo.model.Event;
 import mk.finki.ukim.mk.demo.model.Location;
+import mk.finki.ukim.mk.demo.service.CategoryService;
 import mk.finki.ukim.mk.demo.service.EventBookingService;
 import mk.finki.ukim.mk.demo.service.EventService;
 import mk.finki.ukim.mk.demo.service.LocationService;
@@ -28,15 +30,16 @@ public class EventController {
     private final mk.finki.ukim.mk.demo.service.EventService EventService;
 
     private final LocationService locationService;
+    private final CategoryService categoryService;
 
 
     private List<Event> found_events;
 
-    public EventController(EventBookingService bookings, mk.finki.ukim.mk.demo.service.EventService eventService, LocationService locationService) {
+    public EventController(EventBookingService bookings, mk.finki.ukim.mk.demo.service.EventService eventService, LocationService locationService, CategoryService categoryService) {
         Bookings = bookings;
         EventService = eventService;
         this.locationService = locationService;
-        found_events = new ArrayList<>();
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -69,6 +72,7 @@ public class EventController {
     @GetMapping("/events/add-form")
     public String getAddEventPage(Model model){
         model.addAttribute("location_IDS",locationService.findAll());
+        model.addAttribute("category_IDS",categoryService.findAll());
         return "AddEvent";
     }
     @GetMapping("/events/edit-form/{id}")
@@ -95,16 +99,20 @@ public class EventController {
                             @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularity_score,
-                            @RequestParam long location_id)
+                            @RequestParam long location_id,
+                            @RequestParam long category_id
+    )
     {
         List<Location> locationList = locationService.find_by_ID(location_id);
+        Category categories = categoryService.findById(category_id).get();
         Location tmp = locationList.get(0);
         if (id != null) {
-            this.EventService.update(id,name,description,popularity_score,tmp);
+            this.EventService.update(id,name,description,popularity_score,tmp,categories);
         }
         else{
             Event e = new Event(name,description,popularity_score);
             e.setLocation(tmp);
+            e.setCategory(categories);
             this.EventService.save(e);
         }
         return "redirect:/events";

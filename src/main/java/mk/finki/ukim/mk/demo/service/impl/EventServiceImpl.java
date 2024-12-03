@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.demo.service.impl;
 
+import mk.finki.ukim.mk.demo.model.Category;
 import mk.finki.ukim.mk.demo.model.Event;
 import mk.finki.ukim.mk.demo.model.Location;
 import mk.finki.ukim.mk.demo.repository.inmemory.InMemoryEventRepository;
@@ -38,13 +39,14 @@ public class EventServiceImpl implements EventService {
         return Optional.of(this.eventRepository.save(e));
     }
     @Override
-    public Optional<Event> update(Long id, String name, String desc, double popularity_score, Location e){
+    public Optional<Event> update(Long id, String name, String desc, double popularity_score, Location e, Category c){
         List<Event> eventList = eventRepository.findAllById(id);
         Event tmp=eventList.get(0);
         tmp.setPopularityScore(popularity_score);
         tmp.setName(name);
         tmp.setDescription(desc);
         tmp.setLocation(e);
+        tmp.setCategory(c);
         return Optional.of(this.eventRepository.save(tmp));
     }
 

@@ -86,6 +86,7 @@
                             <th scope="col">Description</th>
                             <th scope="col">Popularity Score</th>
                             <th scope="col">Location Name</th>
+                            <th scope="col">Category Name</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -95,6 +96,7 @@
                             <td th:text="${Events.getDescription()}"></td>
                             <td th:text="${Events.getPopularityScore()}"></td>
                             <td th:text="${Events.getLocation().getName()}"></td>
+                            <td th:text="${Events.getCategory().getName()}"></td>
                             <td class="text-right">
                                 <th:block>
                                     <form th:action="@{'events/delete/{id}' (id=${Events.getId()})}"
