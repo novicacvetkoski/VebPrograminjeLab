@@ -12,6 +12,7 @@ import mk.finki.ukim.mk.demo.service.CategoryService;
 import mk.finki.ukim.mk.demo.service.EventBookingService;
 import mk.finki.ukim.mk.demo.service.EventService;
 import mk.finki.ukim.mk.demo.service.LocationService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,8 @@ public class EventController {
                 .sorted(Comparator.comparingLong(e -> e.getLocation().getId()))
                 .collect(Collectors.toList());
         model.addAttribute("events",eventList);
-        return "listEvents";
+        model.addAttribute("bodyContent","listEvents");
+        return "master-template";
     }
     @PostMapping
     public String Post_Method(HttpServletRequest request, Model model){
@@ -64,16 +66,19 @@ public class EventController {
         return "listEvents";
     }
     @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEvent(@PathVariable Long id){
         this.EventService.deleteById(id);
         return "redirect:/events";
     }
 
     @GetMapping("/events/add-form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAddEventPage(Model model){
         model.addAttribute("location_IDS",locationService.findAll());
         model.addAttribute("category_IDS",categoryService.findAll());
-        return "AddEvent";
+        model.addAttribute("bodyContent","AddEvent");
+        return "master-template";
     }
     @GetMapping("/events/edit-form/{id}")
     public String getEditEventForm(@PathVariable Long id, Model model){
@@ -81,6 +86,7 @@ public class EventController {
             List<Event> eventList = this.EventService.find_by_ID(id);
             Event tmp=eventList.get(0);
             model.addAttribute("location_IDS",locationService.findAll());
+            model.addAttribute("category_IDS",categoryService.findAll());
             model.addAttribute("Event",tmp);
         }
         return "AddEvent";
@@ -95,6 +101,7 @@ public class EventController {
         return "redirect:/event/BookingConfirmation";
     }
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveEvent(@RequestParam(required = false) Long id,
                             @RequestParam String name,
                             @RequestParam String description,
@@ -134,4 +141,5 @@ public class EventController {
         tmp.like();
         return "redirect:/events";
     }
+
 }

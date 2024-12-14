@@ -17,7 +17,7 @@ public class Location {
     @OneToMany(mappedBy = "location")
     List<Event> eventList;
 
-    public Location(Long id, String name, String address, String capacity, String description) {
+    public Location(String name, String address, String capacity, String description) {
         this.id = id;
         this.name = name;
         this.address = address;
