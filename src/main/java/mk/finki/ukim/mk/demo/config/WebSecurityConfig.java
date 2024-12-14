@@ -47,7 +47,7 @@ class WebSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                         .failureUrl("/login?error=BadCredentials")
-                        .defaultSuccessUrl("/listEvents", true)
+                        .defaultSuccessUrl("/events", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
